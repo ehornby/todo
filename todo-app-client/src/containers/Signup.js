@@ -76,8 +76,8 @@ export default class Signup extends Component {
 
     renderConfirmationForm() {
         return (
-            <Form onSubmit={this.handleConfirmationSubmit}>
-                <FormGroup controlid="confirmationCode">
+            <form onSubmit={this.handleConfirmationSubmit}>
+                <FormGroup controlId="confirmationCode">
                     <ControlLabel>Confirmation Code</ControlLabel>
                     <FormControl
                         autoFocus
@@ -92,11 +92,12 @@ export default class Signup extends Component {
                     block
                     type="submit"
                     size="lg"
+                    isLoading={this.state.isLoading}
                     disabled={!this.ValidateConfirmationForm()}
                     text="Verify"
                     loadingText="Verifying..."
                 />
-            </Form>
+            </form>
         );
     }
 

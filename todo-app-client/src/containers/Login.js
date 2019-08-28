@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import { Form, FormControl, FormGroup, ControlLabel, HelpBlock } from 'react-bootstrap';
+import { Form, FormControl, FormGroup, ControlLabel } from 'react-bootstrap';
 import './Login.css';
 import { Auth } from 'aws-amplify';
 import LoaderButton from '../components/LoaderButton';
-import './Signup.css'
 
 export default class Login extends Component {
     constructor(props) {

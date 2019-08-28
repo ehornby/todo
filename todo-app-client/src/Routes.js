@@ -12,4 +12,4 @@ export default ({ childProps }) =>
         <AppliedRoute path="/login" exact component={Login} props={childProps} />
         <AppliedRoute path="/signup" exact component={Signup} props={childProps} />
         <AppliedRoute component={NotFound} />
-    </Switch>
+    </Switch>;
