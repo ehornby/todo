@@ -4,6 +4,8 @@ import { success, failure } from './libs/response-lib';
 
 export async function main(event, context) {
     const data = JSON.parse(event.body);
+
+    // Status: 0 is active, change to status: 1 when complete
     const params = {
         TableName: "todo",
         Item: {
@@ -11,6 +13,7 @@ export async function main(event, context) {
             noteId: uuid.v1(),
             content: data.content,
             createdAt: Date.now(),
+            status: 0
         }
     };
 

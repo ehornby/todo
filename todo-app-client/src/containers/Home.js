@@ -1,8 +1,9 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { PageHeader, ListGroup, ListGroupItem } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import './Home.css'
 import NewItem from './NewItem';
+import CompleteButton from '../components/CompleteButton';
 import { API } from 'aws-amplify';
 
 export default class Home extends Component {
@@ -38,23 +39,26 @@ export default class Home extends Component {
         return [{}].concat(items).map(
             (item, i) =>
                 i !== 0
-                    ? <LinkContainer
+                    ?
+                    <Fragment> 
+                    <CompleteButton />
+                    <LinkContainer
                         key={item.noteId}
                         to={`/todo/$item.noteId}`}
                     >
-                        <ListGroupItem header={item.content}>
-                            {"Created: " + new Date(item.createdAt).toLocaleTimeString()}
+                        <ListGroupItem >
+                            {item.content}
                         </ListGroupItem>
                     </LinkContainer>
+                    </Fragment>
                     : <LinkContainer
                         key="new"
                         to="/todo/new"
                     >
-                        <ListGroupItem>
-                            <h4>
+                            <NewItem />
+                            {/* <h4>
                                 <b>{"\uFF0B"}</b> Add an item
-                            </h4>
-                        </ListGroupItem>
+                            </h4> */}
                     </LinkContainer>
         );               
     }

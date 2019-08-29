@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { FormGroup, FormControl, Button, Row, Form, Col } from 'react-bootstrap';
+import API from 'aws-amplify';
 import './NewItem.css';
 
 export default class NewItem extends Component {
@@ -17,8 +18,26 @@ export default class NewItem extends Component {
         });
     }
 
-    handleSubmit = event => {
+    handleSubmit = async event => {
         event.preventDefault();
+
+        this.setState({ isLoading: true });
+
+        try {
+            await this.addItem({
+                content: this.state.content
+            });
+        }
+        catch (e) {
+            alert(e);
+            this.setState({ isLoading: false });
+        }
+    }
+
+    addItem(item) {
+        return API.post("todo", "/todo", {
+            body: item
+        });
     }
 
     validateForm() {
