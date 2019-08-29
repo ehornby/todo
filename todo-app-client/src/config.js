@@ -5,7 +5,7 @@ export default {
     },
     apiGateway: {
       REGION: "ca-central-1",
-      URL: "https://sawptn4bv3.execute-api.ca-central-1.amazonaws.com/prod/"
+      URL: "https://sawptn4bv3.execute-api.ca-central-1.amazonaws.com/prod"
     },
     cognito: {
       REGION: "ca-central-1",

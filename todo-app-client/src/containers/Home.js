@@ -52,7 +52,7 @@ export default class Home extends Component {
                     >
                         <ListGroupItem>
                             <h4>
-                                <b>{"\uFF0B"}</b>Add an item
+                                <b>{"\uFF0B"}</b> Add an item
                             </h4>
                         </ListGroupItem>
                     </LinkContainer>
