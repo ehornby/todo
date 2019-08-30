@@ -26,6 +26,7 @@ export default class NewItem extends Component {
         try {
             await this.addItem({
                 content: this.state.content
+                
             });
         }
         catch (e) {

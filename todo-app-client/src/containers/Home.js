@@ -1,8 +1,7 @@
 import React, { Component, Fragment } from 'react';
-import { PageHeader, ListGroup, ListGroupItem } from 'react-bootstrap';
+import { Button, PageHeader, ListGroup, ListGroupItem, Form, FormGroup, FormControl, Row, Col } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import './Home.css'
-import NewItem from './NewItem';
 import CompleteButton from '../components/CompleteButton';
 import { API } from 'aws-amplify';
 
@@ -12,8 +11,36 @@ export default class Home extends Component {
 
         this.state = {
             isLoading: true,
-            items: []
+            items: [],
+            content:""
         };
+    }
+
+    handleChange = event => {
+        this.setState({
+            [event.target.id]: event.target.value
+        });
+    }
+
+    handleSubmit = async event => {
+        event.preventDefault();
+        this.setState({ isLoading: true });
+
+        try {
+            await this.addItem({
+                content: this.state.content
+            });
+        }
+        catch (e) {
+            alert(e);
+        }
+        this.setState({ isLoading: false });
+    }
+
+    addItem(item) {
+        return API.post("todo", "/todo", {
+            body: item
+        });
     }
 
     async componentDidMount() {
@@ -38,28 +65,40 @@ export default class Home extends Component {
     renderItemList(items) {
         return [{}].concat(items).map(
             (item, i) =>
-                i !== 0
+                i === 0
                     ?
-                    <Fragment> 
-                    <CompleteButton />
-                    <LinkContainer
-                        key={item.noteId}
-                        to={`/todo/$item.noteId}`}
-                    >
-                        <ListGroupItem >
-                            {item.content}
-                        </ListGroupItem>
-                    </LinkContainer>
-                    </Fragment>
-                    : <LinkContainer
-                        key="new"
-                        to="/todo/new"
-                    >
-                            <NewItem />
-                            {/* <h4>
-                                <b>{"\uFF0B"}</b> Add an item
-                            </h4> */}
-                    </LinkContainer>
+                    <Form onSubmit={this.handleSubmit}>
+                        <FormGroup controlId="content">
+                            <FormControl
+                                autoFocus
+                                type="text"
+                                value={this.state.content}
+                                onChange={this.handleChange}
+                            />
+                        </FormGroup>
+                        <Button
+                            type="submit"
+                        >Add item
+                        </Button>
+                    </Form>
+                    : 
+                    <Form> 
+                        <FormGroup as={Row} controlId="item${i}">
+                            <Col sm="2">
+                                <CompleteButton />
+                            </Col>
+                            <Col sm="10">
+                                <LinkContainer
+                                    key={item.noteId}
+                                    to={`/todo/$item.noteId}`}
+                                >
+                                    <ListGroupItem >
+                                        {item.content}
+                                    </ListGroupItem>
+                                </LinkContainer>
+                            </Col>
+                        </FormGroup>
+                    </Form>                  
         );               
     }
 
