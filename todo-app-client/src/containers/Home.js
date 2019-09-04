@@ -38,6 +38,11 @@ export default class Home extends Component {
     }
 
     addItem(item) {
+        const items = this.state.items;
+        items.push(item);
+        this.setState({ items });
+        console.log(this.state.items);
+
         return API.post("todo", "/todo", {
             body: item
         });
@@ -51,6 +56,8 @@ export default class Home extends Component {
         try {
             const items = await this.items();
             this.setState({ items });
+            console.log(this.state.items);
+            
         }
         catch (e) {
             alert(e);
@@ -62,43 +69,50 @@ export default class Home extends Component {
         return API.get("todo", "/todo");
     }
 
+    renderNewItem() {
+        return (
+            <Fragment>
+                <PageHeader align="center">To Do</PageHeader>
+                <Form onSubmit={this.handleSubmit}>
+                    <FormGroup controlId="content">
+                        <FormControl
+                            autoFocus
+                            type="text"
+                            value={this.state.content}
+                            onChange={this.handleChange}
+                        />
+                    </FormGroup>
+                    <Button
+                        type="submit"
+                    >Add item
+                    </Button>
+                </Form>
+            </Fragment>
+        );
+    }
     renderItemList(items) {
         return [{}].concat(items).map(
             (item, i) =>
-                i === 0
-                    ?
-                    <Form onSubmit={this.handleSubmit}>
-                        <FormGroup controlId="content">
-                            <FormControl
-                                autoFocus
-                                type="text"
-                                value={this.state.content}
-                                onChange={this.handleChange}
-                            />
-                        </FormGroup>
-                        <Button
-                            type="submit"
-                        >Add item
-                        </Button>
-                    </Form>
-                    : 
-                    <Form> 
-                        <FormGroup as={Row} controlId="item${i}">
-                            <Col sm="2">
-                                <CompleteButton />
-                            </Col>
-                            <Col sm="10">
-                                <LinkContainer
-                                    key={item.noteId}
-                                    to={`/todo/$item.noteId}`}
-                                >
-                                    <ListGroupItem >
-                                        {item.content}
-                                    </ListGroupItem>
-                                </LinkContainer>
-                            </Col>
-                        </FormGroup>
-                    </Form>                  
+                i !== 0
+                ?
+                <Form> 
+                    <FormGroup as={Row} controlId="item${i}">
+                        <Col sm="2">
+                            <CompleteButton />
+                        </Col>
+                        <Col sm="10">
+                            <LinkContainer
+                                key={item.noteId}
+                                to={`/todo/$item.noteId}`}
+                            >
+                                <ListGroupItem >
+                                    {item.content}
+                                </ListGroupItem>
+                            </LinkContainer>
+                        </Col>
+                    </FormGroup>
+                </Form>    
+                : null            
         );               
     }
 
@@ -114,7 +128,6 @@ export default class Home extends Component {
     renderItems() {
         return (
             <div className="items">
-                <PageHeader align="center">To Do</PageHeader>
                 <ListGroup>
                     {!this.state.isLoading && this.renderItemList(this.state.items)}
                 </ListGroup>
@@ -124,7 +137,11 @@ export default class Home extends Component {
     render() {
         return (
             <div className="Home">
-                {this.props.isAuthenticated ? this.renderItems() : this.renderLander()}
+                {this.props.isAuthenticated ? 
+                    <div>{this.renderNewItem()}
+                     {this.renderItems()}
+                     </div>
+                     : this.renderLander()}
             </div>
         )
     }
