@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { Button, PageHeader, ListGroup, ListGroupItem, Form, FormGroup, FormControl, Row, Col } from 'react-bootstrap';
+import { Button, ButtonGroup, PageHeader, ListGroup, ListGroupItem, Form, FormGroup, FormControl, Row, Col } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import './Home.css'
 import CompleteButton from '../components/CompleteButton';
@@ -12,7 +12,8 @@ export default class Home extends Component {
         this.state = {
             isLoading: true,
             items: [],
-            content:""
+            content:"",
+            filter: false
         };
     }
 
@@ -34,6 +35,7 @@ export default class Home extends Component {
         catch (e) {
             alert(e);
         }
+        this.setState({ content: "" });
         this.setState({ isLoading: false });
     }
 
@@ -41,7 +43,6 @@ export default class Home extends Component {
         const items = this.state.items;
         items.push(item);
         this.setState({ items });
-        console.log(this.state.items);
 
         return API.post("todo", "/todo", {
             body: item
@@ -55,9 +56,7 @@ export default class Home extends Component {
 
         try {
             const items = await this.items();
-            this.setState({ items });
-            console.log(this.state.items);
-            
+            this.setState({ items });           
         }
         catch (e) {
             alert(e);
@@ -73,7 +72,7 @@ export default class Home extends Component {
         return (
             <Fragment>
                 <PageHeader align="center">To Do</PageHeader>
-                <Form onSubmit={this.handleSubmit}>
+                <Form onSubmit={this.handleSubmit} className="submit">
                     <FormGroup controlId="content">
                         <FormControl
                             autoFocus
@@ -82,11 +81,8 @@ export default class Home extends Component {
                             onChange={this.handleChange}
                         />
                     </FormGroup>
-                    <Button
-                        type="submit"
-                    >Add item
-                    </Button>
                 </Form>
+                {this.renderFilter()}
             </Fragment>
         );
     }
@@ -133,6 +129,26 @@ export default class Home extends Component {
                 </ListGroup>
             </div>
         );
+    }
+
+    renderFilter() {
+        return (
+            <div className="filter">
+            <ButtonGroup className="filter-buttons">
+                <Button
+                    toggle="true"
+                >
+                    Filter Completed
+                </Button>
+                <Button
+                    toggle="true"
+
+                >
+                    No Filters
+                </Button>
+                </ButtonGroup>
+            </div>
+        )
     }
     render() {
         return (
