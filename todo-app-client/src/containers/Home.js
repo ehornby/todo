@@ -1,8 +1,7 @@
 import React, { Component, Fragment } from 'react';
-import { Button, ButtonGroup, PageHeader, ListGroup, ListGroupItem, Form, FormGroup, FormControl, Row, Col } from 'react-bootstrap';
+import { ToggleButton, ToggleButtonGroup, ListGroup, ListGroupItem, Form, FormGroup, FormControl, InputGroup } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import './Home.css'
-import CompleteButton from '../components/CompleteButton';
 import { API } from 'aws-amplify';
 
 export default class Home extends Component {
@@ -68,10 +67,14 @@ export default class Home extends Component {
         return API.get("todo", "/todo");
     }
 
+    handleFilter = () => {
+        this.setState({ filter: !(this.state.filter) })
+    }
+
     renderNewItem() {
         return (
-            <Fragment>
-                <PageHeader align="center">To Do</PageHeader>
+            <div className="home-items">
+                <h1 align="center" margin="20px">To Do</h1>
                 <Form onSubmit={this.handleSubmit} className="submit">
                     <FormGroup controlId="content">
                         <FormControl
@@ -79,36 +82,33 @@ export default class Home extends Component {
                             type="text"
                             value={this.state.content}
                             onChange={this.handleChange}
+                            placeholder="What do you have to do?"
                         />
                     </FormGroup>
                 </Form>
                 {this.renderFilter()}
-            </Fragment>
+            </div>
         );
     }
     renderItemList(items) {
-        return [{}].concat(items).map(
+        return items.map(
             (item, i) =>
-                i !== 0
-                ?
-                <Form> 
-                    <FormGroup as={Row} controlId="item${i}">
-                        <Col sm="2">
-                            <CompleteButton />
-                        </Col>
-                        <Col sm="10">
-                            <LinkContainer
-                                key={item.noteId}
-                                to={`/todo/$item.noteId}`}
-                            >
-                                <ListGroupItem >
-                                    {item.content}
-                                </ListGroupItem>
-                            </LinkContainer>
-                        </Col>
-                    </FormGroup>
-                </Form>    
-                : null            
+            <div className="item-line">
+                <InputGroup size="lg">
+                    <InputGroup.Prepend>
+                        <InputGroup.Checkbox aria-label="check-complete" />
+                    </InputGroup.Prepend>
+                    <LinkContainer
+                        controlId={`item${i}`}
+                        key={item.noteId}
+                        to={`/todo/$item.noteId}`}
+                    >
+                        <ListGroupItem>
+                            {item.content}
+                        </ListGroupItem>
+                    </LinkContainer>
+                </InputGroup>
+            </div>                         
         );               
     }
 
@@ -134,19 +134,18 @@ export default class Home extends Component {
     renderFilter() {
         return (
             <div className="filter">
-            <ButtonGroup className="filter-buttons">
-                <Button
-                    toggle="true"
-                >
+            <ToggleButtonGroup
+                type="checkbox"
+                onChange={this.handleFilter}
+            >
+                <ToggleButton 
+                    type="checkbox" 
+                    name="filter-radio" 
+                    value="filter"
+                    >
                     Filter Completed
-                </Button>
-                <Button
-                    toggle="true"
-
-                >
-                    No Filters
-                </Button>
-                </ButtonGroup>
+                </ToggleButton>
+              </ToggleButtonGroup>
             </div>
         )
     }
