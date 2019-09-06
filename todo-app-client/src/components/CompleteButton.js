@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Glyphicon } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import './CompleteButton.css';
 
 export default ({
@@ -12,8 +12,8 @@ export default ({
         className={`CompleteButton${className}`}
         block
     >
-        {isComplete 
+        {/* {isComplete 
         ? <Glyphicon glyph="check" className="complete" />
         : <Glyphicon glyph="tag" className="incomplete" />
-        }    
+        }     */}
     </Button>;

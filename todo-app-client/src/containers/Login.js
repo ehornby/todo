@@ -46,7 +46,7 @@ export default class Login extends Component {
             <div className="Login">
                 <Form onSubmit={this.handleSubmit}>
                     <FormGroup controlId="email">
-                        <ControlLabel>Email</ControlLabel>
+                        {/* <ControlLabel>Email</ControlLabel> */}
                         <FormControl
                             autoFocus
                             type="email"
@@ -56,7 +56,7 @@ export default class Login extends Component {
                         />
                     </FormGroup>
                     <FormGroup controlId="password">
-                        <ControlLabel>Password</ControlLabel>
+                        {/* <ControlLabel>Password</ControlLabel> */}
                         <FormControl
                             type="password"
                             placeholder="Password"

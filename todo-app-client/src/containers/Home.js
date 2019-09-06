@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
-import { Button, ButtonGroup, PageHeader, ListGroup, ListGroupItem, Form, FormGroup, FormControl, Row, Col } from 'react-bootstrap';
+import { Button, ButtonGroup, ListGroup, ListGroupItem, Form, FormGroup, FormControl, Row, Col } from 'react-bootstrap';
+import { InputGroup } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import './Home.css'
 import CompleteButton from '../components/CompleteButton';
@@ -71,7 +72,7 @@ export default class Home extends Component {
     renderNewItem() {
         return (
             <Fragment>
-                <PageHeader align="center">To Do</PageHeader>
+                {/* <PageHeader align="center">To Do</PageHeader> */}
                 <Form onSubmit={this.handleSubmit} className="submit">
                     <FormGroup controlId="content">
                         <FormControl
@@ -82,20 +83,38 @@ export default class Home extends Component {
                         />
                     </FormGroup>
                 </Form>
+                <InputGroup className="test">
+
+                </InputGroup>
                 {this.renderFilter()}
             </Fragment>
         );
     }
     renderItemList(items) {
-        return [{}].concat(items).map(
+        return items.map(
             (item, i) =>
                 i !== 0
                 ?
-                <Form> 
+                <InputGroup className="item-line">
+                    <InputGroup.Prepend>
+                        <InputGroup.Checkbox aria-label="item-status" />
+                    </InputGroup.Prepend>
+                    <FormControl>
+                        <LinkContainer
+                            key={item.noteId}
+                            to={`/todo/$item.noteId}`}
+                        >
+                            <ListGroupItem>
+                                {item.content}
+                            </ListGroupItem>
+                        </LinkContainer>
+                    </FormControl>
+                </InputGroup>
+                /* <Form>
                     <FormGroup as={Row} controlId="item${i}">
                         <Col sm="2">
                             <CompleteButton />
-                        </Col>
+                        </Col> 
                         <Col sm="10">
                             <LinkContainer
                                 key={item.noteId}
@@ -107,7 +126,7 @@ export default class Home extends Component {
                             </LinkContainer>
                         </Col>
                     </FormGroup>
-                </Form>    
+                </Form> */
                 : null            
         );               
     }

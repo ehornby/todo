@@ -1,3 +1,4 @@
-.Glyphicon {
-    opacity: 0.1;
+.Button .Glyphicon .incomplete {
+    background-color: green;
+    color: green;
 }

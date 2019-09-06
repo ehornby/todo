@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Auth } from 'aws-amplify';
-import { Form, FormControl, FormGroup, HelpBlock, ControlLabel } from 'react-bootstrap';
+import { Form, FormControl, FormGroup } from 'react-bootstrap';
 import LoaderButton from '../components/LoaderButton';
 
 export default class Signup extends Component {
@@ -78,7 +78,7 @@ export default class Signup extends Component {
         return (
             <form onSubmit={this.handleConfirmationSubmit}>
                 <FormGroup controlId="confirmationCode">
-                    <ControlLabel>Confirmation Code</ControlLabel>
+                    {/* <ControlLabel>Confirmation Code</ControlLabel> */}
                     <FormControl
                         autoFocus
                         type="tel"
@@ -86,7 +86,7 @@ export default class Signup extends Component {
                         value={this.state.confirmationCode}
                         onChange={this.handleChange}
                     />
-                    <HelpBlock>Please check your email for the code.</HelpBlock>
+                    {/* <HelpBlock>Please check your email for the code.</HelpBlock> */}
                 </FormGroup>
                 <LoaderButton
                     block
@@ -105,7 +105,7 @@ export default class Signup extends Component {
         return (
             <Form onSubmit={this.handleSubmit}>
                 <FormGroup controlId="email">
-                    <ControlLabel>Email Address</ControlLabel>
+{/*                     <ControlLabel>Email Address</ControlLabel> */}
                     <FormControl
                         autoFocus
                         type="email"
@@ -115,7 +115,7 @@ export default class Signup extends Component {
                     />
                 </FormGroup>
                 <FormGroup controlId="password">
-                    <ControlLabel>Password</ControlLabel>
+{/*                     <ControlLabel>Password</ControlLabel> */}
                     <FormControl
                         type="password"
                         placeholder="Password"
@@ -124,7 +124,7 @@ export default class Signup extends Component {
                     />
                 </FormGroup>
                 <FormGroup controlId="confirmPassword">
-                    <ControlLabel>Confirm Password</ControlLabel>
+{/*                     <ControlLabel>Confirm Password</ControlLabel> */}
                     <FormControl
                         type="password"
                         placeholder="Confirm Password"
