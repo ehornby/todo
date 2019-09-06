@@ -2,9 +2,12 @@ import React, { Component, Fragment } from 'react';
 import './App.css';
 import Routes from './Routes';
 import { Link, withRouter } from 'react-router-dom';
-import { Nav, Navbar, NavItem } from 'react-bootstrap';
+import { NavbarBrand, Navbar, Nav } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Auth } from 'aws-amplify';
+import NavbarCollapse from 'react-bootstrap/NavbarCollapse';
+import NavLink from 'react-bootstrap/NavLink';
+
 
 class App extends Component {
   constructor(props) {
@@ -48,29 +51,28 @@ class App extends Component {
 
     return (
       !this.state.isAuthenticating &&
-      <div className="App container">
-        <Navbar fluid collapseOnSelect>
-          <Navbar.Header>
-            <Navbar.Brand>
-              <Link to="/">Vault</Link>
-            </Navbar.Brand>
-            <Navbar.Toggle />
-          </Navbar.Header>
-          <Navbar.Collapse>
-            <Nav pullRight>
-            {this.state.isAuthenticated
-            ? <NavItem onClick={this.handleLogout}>Logout</NavItem>
-            : <Fragment>
+      <div className="App container">      
+        <Navbar bg="light" collapseOnSelect>
+          <NavbarBrand>
+            <Link to="/">Vault</Link> 
+          </NavbarBrand>
+          <NavbarCollapse className="justify-content-end">
+            <Nav>
+              {this.state.isAuthenticated
+              ?
+              <NavLink onClick={this.handleLogout}>Logout</NavLink>
+              : 
+              <Nav>
                 <LinkContainer to="/signup">
-                  <NavItem>Sign Up</NavItem>
+                  <NavLink>Sign Up</NavLink>
                 </LinkContainer>
                 <LinkContainer to="/login">
-                  <NavItem>Login</NavItem>
+                  <NavLink>Login</NavLink>
                 </LinkContainer>
-              </Fragment>
-            }
+              </Nav>
+              }
             </Nav>
-          </Navbar.Collapse>
+          </NavbarCollapse>
         </Navbar>
         <Routes childProps={childProps}/>
       </div>
