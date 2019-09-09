@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { ToggleButton, ToggleButtonGroup, ListGroup, ListGroupItem, Form, FormGroup, FormControl, InputGroup } from 'react-bootstrap';
+import { ToggleButton, ToggleButtonGroup, ListGroup, ListGroupItem, Form, FormGroup, FormControl, InputGroup, Button } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import './Home.css'
 import { API } from 'aws-amplify';
@@ -12,7 +12,8 @@ export default class Home extends Component {
             isLoading: true,
             items: [],
             content:"",
-            filter: false
+            filter: false,
+            isDeleting: false
         };
     }
 
@@ -22,6 +23,8 @@ export default class Home extends Component {
         });
     }
 
+    // On submission, calls create API to add new item to database, then
+    // clears content in state and triggers re-render of item list
     handleSubmit = async event => {
         event.preventDefault();
         this.setState({ isLoading: true });
@@ -38,16 +41,16 @@ export default class Home extends Component {
         this.setState({ isLoading: false });
     }
 
-    addItem(item) {
-        const items = this.state.items;
-        items.push(item);
-        this.setState({ items });
-
+    // Calls create API and pushes new item to list so that another DB
+    // call to update list is not immediately necessary
+    async addItem(item) {
+        const items = await this.items();
         return API.post("todo", "/todo", {
             body: item
         });
     }
 
+    // Calls DB for item list when page first renders
     async componentDidMount() {
         if (!this.props.isAuthenticated) {
             return;
@@ -55,6 +58,7 @@ export default class Home extends Component {
 
         try {
             const items = await this.items();
+            items.sort();
             this.setState({ items });           
         }
         catch (e) {
@@ -63,14 +67,48 @@ export default class Home extends Component {
         this.setState({ isLoading: false });
     }
     
+    // Calls return API to get item list
     items() {
         return API.get("todo", "/todo");
     }
 
+    // Toggles the filter state 
     handleFilter = () => {
         this.setState({ filter: !(this.state.filter) })
     }
 
+    // Calls the update API to change item status (implement later)
+    updateStatus = event => {
+
+    }
+
+    // Calls the update API to change note content (implement later)
+    updateItem = async event => {
+
+    }
+
+    // Takes the note ID and makes a backend call to delete the DB item
+    handleDelete = async id => {
+
+        this.setState({ isDeleting: true });
+
+        try {
+            await this.deleteItem(id);
+        }
+        catch (e) {
+            alert(e);
+        }
+        this.setState({ isDeleting: false });
+        const items = await this.items();
+        this.setState({ items });
+    }
+
+    // Calls the API to delete an item
+    deleteItem = id => {
+        return API.del("todo", `/todo/${id}`);
+    }
+
+    // Renders the new item line and the filter/clear complete buttons
     renderNewItem() {
         return (
             <div className="home-items">
@@ -86,27 +124,34 @@ export default class Home extends Component {
                         />
                     </FormGroup>
                 </Form>
-                {this.renderFilter()}
+                {/* {this.renderFilter()} */}
             </div>
         );
     }
+
+    // Renders the item list by looping through the DB return
+    // *Parts commented out are for linking to update notes
     renderItemList(items) {
         return items.map(
             (item, i) =>
             <div className="item-line">
-                <InputGroup size="lg">
-                    <InputGroup.Prepend>
-                        <InputGroup.Checkbox aria-label="check-complete" />
+                <InputGroup>
+                    <InputGroup.Prepend className="item-complete">
+                        <Button
+                            variant="outline-danger"
+                            className="complete-x"
+                            onClick={() => this.handleDelete(item.noteId)}
+                            >X</Button>
                     </InputGroup.Prepend>
-                    <LinkContainer
+                    {/* <LinkContainer
                         controlId={`item${i}`}
                         key={item.noteId}
                         to={`/todo/$item.noteId}`}
-                    >
+                    > */}
                         <ListGroupItem>
                             {item.content}
                         </ListGroupItem>
-                    </LinkContainer>
+                    {/* </LinkContainer> */}
                 </InputGroup>
             </div>                         
         );               
@@ -131,6 +176,7 @@ export default class Home extends Component {
         );
     }
 
+    // Renders the filter and clear completed items buttons (implement later)
     renderFilter() {
         return (
             <div className="filter">
@@ -146,6 +192,10 @@ export default class Home extends Component {
                     Filter Completed
                 </ToggleButton>
               </ToggleButtonGroup>
+              <Button
+                >
+                    Clear Completed Items
+                </Button>
             </div>
         )
     }
