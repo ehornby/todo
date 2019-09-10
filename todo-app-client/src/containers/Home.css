@@ -15,3 +15,11 @@
 .Home .items {
     margin: 20px auto;
 }
+
+.Home .filter Button{
+    margin: 0 20px;
+}
+
+.Home .item-line .item-complete :hover{
+    transform: scale(1.1);
+}
