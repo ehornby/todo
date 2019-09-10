@@ -37,6 +37,9 @@ export default class Home extends Component {
         catch (e) {
             alert(e);
         }
+        const items = await this.items();
+        items.sort();
+        this.setState ({ items });
         this.setState({ content: "" });
         this.setState({ isLoading: false });
     }
@@ -44,7 +47,6 @@ export default class Home extends Component {
     // Calls create API and pushes new item to list so that another DB
     // call to update list is not immediately necessary
     async addItem(item) {
-        const items = await this.items();
         return API.post("todo", "/todo", {
             body: item
         });
@@ -78,7 +80,7 @@ export default class Home extends Component {
     }
 
     // Calls the update API to change item status (implement later)
-    updateStatus = event => {
+    updateStatus = id => {
 
     }
 
@@ -89,7 +91,6 @@ export default class Home extends Component {
 
     // Takes the note ID and makes a backend call to delete the DB item
     handleDelete = async id => {
-
         this.setState({ isDeleting: true });
 
         try {
@@ -141,7 +142,12 @@ export default class Home extends Component {
                             variant="outline-danger"
                             className="complete-x"
                             onClick={() => this.handleDelete(item.noteId)}
-                            >X</Button>
+                        >
+                            X
+                        </Button>
+                        {/* <InputGroup.Checkbox 
+                            onChange={() => this.updateStatus(item.noteId)}
+                        />                            */}
                     </InputGroup.Prepend>
                     {/* <LinkContainer
                         controlId={`item${i}`}
